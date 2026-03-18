@@ -1,30 +1,30 @@
 import { useState, useRef, useEffect } from "react";
- 
+
 // ── THEMES ─────────────────────────────────────────────────────
 const DARK={bg:"#080808",surface:"#101010",card:"#161616",border:"#242424",accent:"#E0E0E0",accentSoft:"rgba(220,220,220,0.07)",green:"#1DB97A",yellow:"#F0A500",red:"#E05555",blue:"#4B9EFF",text:"#F0F0F0",textMuted:"#606060",textDim:"#2E2E2E",shadow:"0 8px 32px rgba(0,0,0,0.8)"};
 const LIGHT={bg:"#F0F0F8",surface:"#FFFFFF",card:"#FFFFFF",border:"#E2E2EE",accent:"#6C5FFF",accentSoft:"rgba(108,95,255,0.10)",green:"#16A34A",yellow:"#D97706",red:"#DC2626",blue:"#2563EB",text:"#1A1A30",textMuted:"#55557A",textDim:"#AAAACC",shadow:"0 4px 20px rgba(0,0,0,0.08)"};
- 
+
 const ICON_LIST=["▣","▦","◫","◉","◎","◈","★","♦","☀","☁","⚡","🔥","💡","🎯","📌","📋","📊","📈","💰","🏢","👤","🔔","⚙","🎨","🚀","💎","🌟","✅","📝","💼","🏆","🎪","🌈","⭐","🎭","🦁","🐯","🦊","🦋","🌺"];
 const COLOR_PALETTE=["#E0E0E0","#FF6B6B","#FF8E53","#FFD93D","#6BCB77","#4D96FF","#C77DFF","#FF6BD6","#00D4AA","#FF4757","#2ED573","#1E90FF","#FF6348","#ECCC68","#A29BFE","#FD79A8","#00CEC9","#E17055","#74B9FF","#55EFC4","#FDCB6E","#6C5CE7","#E84393","#00B894","#D63031","#0984E3","#F0A500","#1DB97A","#E05555","#4B9EFF"];
 const TODAY="2026-03-18";
 const TOMORROW="2026-03-19";
 const CURRENCIES={BRL:{symbol:"R$",name:"Real"},USD:{symbol:"$",name:"Dólar"},EUR:{symbol:"€",name:"Euro"}};
- 
+
 const TXT={
   pt:{dashboard:"Dashboard",tasks:"Tarefas",companies:"Empresas",clients:"Clientes",financial:"Financeiro",notif:"Notificações",newTask:"Nova Tarefa",newCompany:"Nova Empresa",newClient:"Novo Cliente",newEntry:"Novo Lançamento",settings:"Configurações",filterCompany:"Filtrar empresa",allCompanies:"Todas",allClients:"Todos",todo:"A Fazer",doing:"Em Andamento",done:"Concluído",high:"Alta",medium:"Média",low:"Baixa",priority:"Prioridade",status:"Status",title:"Título",company:"Empresa",client:"Cliente",assignee:"Responsável",due:"Prazo",cancel:"Cancelar",save:"Salvar",create:"Criar",income:"Entrada",expense:"Saída",balance:"Saldo",entries:"Lançamentos",currency:"Moeda",language:"Idioma",theme:"Tema",dark:"Preto",light:"Claro",markAllRead:"Marcar tudo como lido",markAllDone:"Marcar tudo como feito",todayLabel:"Vence Hoje",tomorrowLabel:"Vence Amanhã",noPending:"Nenhuma notificação pendente.",noCurrencyForEntry:"Moeda deste lançamento",kanban:"Kanban",list:"Lista",calendar:"Calendário",gantt:"Gantt",editProfile:"Editar Perfil",name:"Nome",role:"Cargo",profilePhoto:"Foto de Perfil (emoji)",concludeCompany:"Concluir",deleteCompany:"Excluir",projectTypes:"Tipos de Projeto",addType:"+ Adicionar",active:"Ativo",viewTasks:"Ver Tarefas",completedCompanies:"Empresas Concluídas",totalTasks:"Total Tarefas",completed:"Concluídas",inProgress:"Em Andamento",highPri:"Alta Prioridade",incomeToday:"Entradas Hoje",expenseToday:"Saídas Hoje",progressByCompany:"Progresso por Empresa",recentTasks:"Tarefas Recentes",noTask:"Nenhuma tarefa.",noClient:"Nenhum cliente.",taskDetail:"Detalhes da Tarefa",editTask:"Editar Tarefa",saveChanges:"Salvar Alterações",deleteTask:"Excluir",closeBtn:"Fechar",editClient:"Editar Cliente",saveClient:"Salvar Cliente",noProjectTypes:"Selecione uma empresa para ver os tipos.",newType:"+ Novo tipo",totalIncome:"Total Entradas",totalExpense:"Total Saídas",dragHint:"💡 Arraste tarefas para outras datas",noGantt:"Adicione prazos para ver o Gantt.",searchClient:"Buscar...",icon:"Ícone / Emoji",color:"Cor",customizeNav:"Personalizar Aba",saveNav:"Salvar",entryType:"Tipo",entryAmount:"Valor",entryDate:"Data",entryNotes:"Observações",entryCompany:"Empresa",entryClient:"Cliente",post:"Lançar",address:"Endereço",email:"Email",phone:"Telefone",companies2:"Empresa(s)",projectsCol:"Projetos"},
   en:{dashboard:"Dashboard",tasks:"Tasks",companies:"Companies",clients:"Clients",financial:"Financial",notif:"Notifications",newTask:"New Task",newCompany:"New Company",newClient:"New Client",newEntry:"New Entry",settings:"Settings",filterCompany:"Filter company",allCompanies:"All",allClients:"All",todo:"To Do",doing:"In Progress",done:"Done",high:"High",medium:"Medium",low:"Low",priority:"Priority",status:"Status",title:"Title",company:"Company",client:"Client",assignee:"Assignee",due:"Due Date",cancel:"Cancel",save:"Save",create:"Create",income:"Income",expense:"Expense",balance:"Balance",entries:"Entries",currency:"Currency",language:"Language",theme:"Theme",dark:"Black",light:"Light",markAllRead:"Mark all as read",markAllDone:"Mark all as done",todayLabel:"Due Today",tomorrowLabel:"Due Tomorrow",noPending:"No pending notifications.",noCurrencyForEntry:"Currency for this entry",kanban:"Kanban",list:"List",calendar:"Calendar",gantt:"Gantt",editProfile:"Edit Profile",name:"Name",role:"Role",profilePhoto:"Profile Photo (emoji)",concludeCompany:"Complete",deleteCompany:"Delete",projectTypes:"Project Types",addType:"+ Add",active:"Active",viewTasks:"View Tasks",completedCompanies:"Completed Companies",totalTasks:"Total Tasks",completed:"Completed",inProgress:"In Progress",highPri:"High Priority",incomeToday:"Income Today",expenseToday:"Expenses Today",progressByCompany:"Progress by Company",recentTasks:"Recent Tasks",noTask:"No tasks.",noClient:"No clients.",taskDetail:"Task Details",editTask:"Edit Task",saveChanges:"Save Changes",deleteTask:"Delete",closeBtn:"Close",editClient:"Edit Client",saveClient:"Save Client",noProjectTypes:"Select a company to see types.",newType:"+ New type",totalIncome:"Total Income",totalExpense:"Total Expenses",dragHint:"💡 Drag tasks to other dates",noGantt:"Add deadlines to see Gantt.",searchClient:"Search...",icon:"Icon / Emoji",color:"Color",customizeNav:"Customize Tab",saveNav:"Save",entryType:"Type",entryAmount:"Amount",entryDate:"Date",entryNotes:"Notes",entryCompany:"Company",entryClient:"Client",post:"Post",address:"Address",email:"Email",phone:"Phone",companies2:"Company(ies)",projectsCol:"Projects"},
   es:{dashboard:"Dashboard",tasks:"Tareas",companies:"Empresas",clients:"Clientes",financial:"Financiero",notif:"Notificaciones",newTask:"Nueva Tarea",newCompany:"Nueva Empresa",newClient:"Nuevo Cliente",newEntry:"Nuevo Registro",settings:"Configuración",filterCompany:"Filtrar empresa",allCompanies:"Todas",allClients:"Todos",todo:"Por Hacer",doing:"En Progreso",done:"Hecho",high:"Alta",medium:"Media",low:"Baja",priority:"Prioridad",status:"Estado",title:"Título",company:"Empresa",client:"Cliente",assignee:"Responsable",due:"Fecha",cancel:"Cancelar",save:"Guardar",create:"Crear",income:"Ingreso",expense:"Gasto",balance:"Saldo",entries:"Registros",currency:"Moneda",language:"Idioma",theme:"Tema",dark:"Negro",light:"Claro",markAllRead:"Marcar todo leído",markAllDone:"Marcar todo hecho",todayLabel:"Vence Hoy",tomorrowLabel:"Vence Mañana",noPending:"Sin notificaciones pendientes.",noCurrencyForEntry:"Moneda de este registro",kanban:"Kanban",list:"Lista",calendar:"Calendario",gantt:"Gantt",editProfile:"Editar Perfil",name:"Nombre",role:"Cargo",profilePhoto:"Foto de Perfil (emoji)",concludeCompany:"Completar",deleteCompany:"Eliminar",projectTypes:"Tipos de Proyecto",addType:"+ Agregar",active:"Activo",viewTasks:"Ver Tareas",completedCompanies:"Empresas Completadas",totalTasks:"Total Tareas",completed:"Completadas",inProgress:"En Progreso",highPri:"Alta Prioridad",incomeToday:"Ingresos Hoy",expenseToday:"Gastos Hoy",progressByCompany:"Progreso por Empresa",recentTasks:"Tareas Recientes",noTask:"Sin tareas.",noClient:"Sin clientes.",taskDetail:"Detalles de Tarea",editTask:"Editar Tarea",saveChanges:"Guardar Cambios",deleteTask:"Eliminar",closeBtn:"Cerrar",editClient:"Editar Cliente",saveClient:"Guardar Cliente",noProjectTypes:"Selecciona una empresa para ver tipos.",newType:"+ Nuevo tipo",totalIncome:"Total Ingresos",totalExpense:"Total Gastos",dragHint:"💡 Arrastra tareas a otras fechas",noGantt:"Agrega fechas para ver el Gantt.",searchClient:"Buscar...",icon:"Ícono / Emoji",color:"Color",customizeNav:"Personalizar Pestaña",saveNav:"Guardar",entryType:"Tipo",entryAmount:"Monto",entryDate:"Fecha",entryNotes:"Notas",entryCompany:"Empresa",entryClient:"Cliente",post:"Registrar",address:"Dirección",email:"Email",phone:"Teléfono",companies2:"Empresa(s)",projectsCol:"Proyectos"},
 };
- 
+
 function Modal({children,onClose,C,title,wide}){return(<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.75)",display:"flex",alignItems:"center",justifyContent:"center",zIndex:500,backdropFilter:"blur(4px)"}} onClick={e=>e.target===e.currentTarget&&onClose()}><div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:16,padding:26,width:wide?640:490,maxWidth:"96vw",maxHeight:"92vh",overflowY:"auto",boxShadow:C.shadow}}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:20}}><h2 style={{fontSize:18,color:C.text,fontWeight:600}}>{title}</h2><button onClick={onClose} style={{background:"none",border:"none",color:C.textMuted,cursor:"pointer",fontSize:22,lineHeight:1,padding:0}}>×</button></div><div style={{display:"flex",flexDirection:"column",gap:12}}>{children}</div></div></div>);}
 function Field({label,C,children,half}){return(<div style={{flex:half?"1 1 45%":"1 1 100%"}}><label style={{fontSize:10,color:C.textMuted,fontWeight:600,display:"block",marginBottom:5,textTransform:"uppercase",letterSpacing:0.7}}>{label}</label>{children}</div>);}
 function Chip({label,color,bg,border}){return <span style={{display:"inline-flex",alignItems:"center",fontSize:10,padding:"2px 8px",borderRadius:20,fontWeight:600,whiteSpace:"nowrap",color,background:bg||`${color}18`,border:border||`1px solid ${color}28`}}>{label}</span>;}
 function inp(C,ex={}){return{background:C.surface,border:`1px solid ${C.border}`,borderRadius:9,color:C.text,fontSize:13,padding:"9px 12px",width:"100%",fontFamily:"inherit",...ex};}
 function Actions({C,onCancel,onConfirm,lbl}){return(<div style={{display:"flex",gap:9,marginTop:8}}><button onClick={onCancel} style={{flex:1,padding:"10px",borderRadius:9,fontSize:13,fontWeight:600,fontFamily:"inherit",background:C.surface,border:`1px solid ${C.border}`,color:C.textMuted,cursor:"pointer"}}>Cancel</button><button onClick={onConfirm} style={{flex:2,padding:"10px",borderRadius:9,fontSize:13,fontWeight:600,fontFamily:"inherit",background:C.accent,border:"none",color:C.bg,cursor:"pointer"}}>{lbl}</button></div>);}
- 
+
 function IconPicker({C,onSelect,onClose}){return(<div style={{position:"absolute",bottom:"110%",left:0,background:C.card,border:`1px solid ${C.border}`,borderRadius:12,padding:10,zIndex:600,boxShadow:C.shadow,width:280}} onClick={e=>e.stopPropagation()}><div style={{display:"flex",flexWrap:"wrap",gap:4}}>{ICON_LIST.map(ic=>(<button key={ic} onClick={()=>{onSelect(ic);onClose();}} style={{width:32,height:32,borderRadius:7,background:"none",border:`1px solid ${C.border}`,cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}} onMouseEnter={e=>e.currentTarget.style.background=C.accentSoft} onMouseLeave={e=>e.currentTarget.style.background="none"}>{ic}</button>))}</div></div>);}
 function ColorPicker({C,onSelect,onClose,current}){return(<div style={{position:"absolute",bottom:"110%",left:0,background:C.card,border:`1px solid ${C.border}`,borderRadius:12,padding:10,zIndex:600,boxShadow:C.shadow,width:260}} onClick={e=>e.stopPropagation()}><div style={{display:"flex",flexWrap:"wrap",gap:6}}>{COLOR_PALETTE.map(col=>(<div key={col} onClick={()=>{onSelect(col);onClose();}} style={{width:24,height:24,borderRadius:6,background:col,cursor:"pointer",border:`2px solid ${current===col?"#fff":"transparent"}`,flexShrink:0}}/>))}</div></div>);}
- 
+
 // Inline quick-edit cell for list view
 function QuickCell({value,options,color,C,onChange}){
   const [open,setOpen]=useState(false);
@@ -51,7 +51,7 @@ function QuickCell({value,options,color,C,onChange}){
     </div>
   );
 }
- 
+
 // Inline quick-edit date cell for list view
 function QuickDateCell({value,C,onChange}){
   const [open,setOpen]=useState(false);
@@ -75,7 +75,7 @@ function QuickDateCell({value,C,onChange}){
     </div>
   );
 }
- 
+
 export default function App(){
   const [lang,setLang]=useState("pt");
   const [theme,setTheme]=useState("dark");
@@ -88,7 +88,7 @@ export default function App(){
   const [taskView,setTaskView]=useState("kanban");
   const [filterCompany,setFilterCompany]=useState("all");
   const [readNotifs,setReadNotifs]=useState([]);
- 
+
   const [navItems,setNavItems]=useState([
     {id:"dashboard",icon:"▣",color:"#E0E0E0"},
     {id:"tasks",    icon:"▦",color:"#4B9EFF"},
@@ -106,7 +106,7 @@ export default function App(){
   const [editProfile,setEditProfile]=useState({name:"Aline",emoji:"👤",role:"Admin",photo:null});
   const photoInputRef=useRef(null);
   const profileRef=useRef(null);
- 
+
   const [companies,setCompanies]=useState([
     {id:"upper",name:"Upper Agency",   icon:"🏢",color:"#4B9EFF",status:"active",projectTypes:["Site","Marca","Tráfego Pago","Social Media","SEO"]},
     {id:"zory", name:"Zory Assessoria",icon:"⚙", color:"#1DB97A",status:"active",projectTypes:["Consultoria","ClickUp Setup","Gestão de Processos","Treinamento"]},
@@ -133,7 +133,7 @@ export default function App(){
     {id:3,type:"income", companyId:"zory", clientId:"c3",amount:2200,date:"2026-03-17",notes:"Consultoria mensal",currency:"BRL"},
     {id:4,type:"income", companyId:"upper",clientId:"c1",amount:800, date:TODAY,       notes:"Gestão tráfego",currency:"BRL"},
   ]);
- 
+
   const [showNewTask,    setShowNewTask]    =useState(false);
   const [showNewCompany, setShowNewCompany] =useState(false);
   const [showNewEntry,   setShowNewEntry]   =useState(false);
@@ -171,10 +171,11 @@ export default function App(){
   const [finDateFilter,setFinDateFilter]=useState("all");
   const [finCustomFrom,setFinCustomFrom]=useState("");
   const [finCustomTo,setFinCustomTo]=useState("");
+  const [finCompanyFilter,setFinCompanyFilter]=useState("all");
   const [showFinDatePicker,setShowFinDatePicker]=useState(false);
- 
+
   useEffect(()=>{const h=e=>{if(profileRef.current&&!profileRef.current.contains(e.target))setShowProfileMenu(false);};document.addEventListener("mousedown",h);return()=>document.removeEventListener("mousedown",h);},[]);
- 
+
   const activeCompanies=companies.filter(c=>c.status==="active");
   const completedCompanies=companies.filter(c=>c.status==="completed");
   const getCompany=id=>companies.find(c=>c.id===id);
@@ -185,7 +186,7 @@ export default function App(){
   const statusLabel=s=>s==="done"?t.done:s==="doing"?t.doing:t.todo;
   const clientsForCompany=cid=>clients.filter(cl=>cl.companies.includes(cid));
   const companyProgress=cid=>{const ct=tasks.filter(tk=>tk.companyId===cid);return{total:ct.length,done:ct.filter(tk=>tk.status==="done").length};};
- 
+
   const visibleTasks=(()=>{let tt=tasks.filter(tk=>activeCompanies.some(c=>c.id===tk.companyId));if(filterCompany!=="all")tt=tt.filter(tk=>tk.companyId===filterCompany);return tt;})();
   const dateFilteredTasks=visibleTasks.filter(tk=>taskMatchesDateFilter(tk));
   const todoT=dateFilteredTasks.filter(t=>t.status==="todo");
@@ -199,10 +200,10 @@ export default function App(){
   const todayIn=todayE.filter(e=>e.type==="income").reduce((s,e)=>s+Number(e.amount),0);
   const todayOut=todayE.filter(e=>e.type==="expense").reduce((s,e)=>s+Number(e.amount),0);
   const filteredClients=clients.filter(cl=>(clientFilter==="all"||cl.companies.includes(clientFilter))&&(cl.name.toLowerCase().includes(clientSearch.toLowerCase())||cl.email.toLowerCase().includes(clientSearch.toLowerCase())));
- 
+
   const notifTasks=tasks.filter(tk=>tk.status!=="done"&&(tk.due===TODAY||tk.due===TOMORROW)&&!readNotifs.includes(tk.id));
   const unreadCount=notifTasks.length;
- 
+
   function addTask(){if(!newTask.title.trim())return;setTasks(p=>[...p,{...newTask,id:Date.now()}]);setNewTask({title:"",companyId:"upper",clientId:"",status:"todo",priority:"medium",due:"",assignee:""});setShowNewTask(false);}
   function deleteTask(id){setTasks(tt=>tt.filter(x=>x.id!==id));if(viewTask?.id===id)setViewTask(null);}
   function updateTask(id,patch){setTasks(tt=>tt.map(x=>x.id===id?{...x,...patch}:x));if(viewTask?.id===id)setViewTask(v=>({...v,...patch}));}
@@ -217,7 +218,7 @@ export default function App(){
   function deleteClient(id){setClients(c=>c.filter(x=>x.id!==id));}
   function saveClient(updated){setClients(c=>c.map(x=>x.id===updated.id?updated:x));setViewClient(updated);setEditClientId(null);}
   function dropOnCalDay(ds){if(!dragCalTask)return;updateTask(dragCalTask,{due:ds});setDragCalTask(null);}
- 
+
   // Date filter helpers
   function getNext7(){const d=new Date(TODAY);d.setDate(d.getDate()+6);return d.toISOString().slice(0,10);}
   function taskMatchesDateFilter(tk){
@@ -250,18 +251,18 @@ export default function App(){
     setCompanies(c=>c.map(x=>x.id===editSidebarCompany.id?{...x,name:editSidebarCompany.name,icon:editSidebarCompany.icon,color:editSidebarCompany.color}:x));
     setEditSidebarCompany(null);setShowSidebarIconPicker(false);setShowSidebarColorPicker(false);
   }
- 
+
   const firstDay=new Date(2026,2,1).getDay();
   const daysInMonth=31;
   const monthName=new Date(2026,2,1).toLocaleString(lang==="pt"?"pt-BR":lang==="es"?"es-ES":"en-US",{month:"long",year:"numeric"});
   const ganttDays=Array.from({length:14},(_,i)=>{const d=new Date("2026-03-15");d.setDate(d.getDate()+i);return d.toISOString().slice(0,10);});
-  const navLabel=id=>t[id]||id;
- 
+  const navLabel=id=>{const it=navItems.find(n=>n.id===id);return it?.label||t[id]||id;};
+
   const statusOptions=[{value:"todo",label:t.todo,color:C.textMuted},{value:"doing",label:t.doing,color:C.blue},{value:"done",label:t.done,color:C.green}];
   const prioOptions=[{value:"high",label:t.high,color:C.red},{value:"medium",label:t.medium,color:C.yellow},{value:"low",label:t.low,color:C.green}];
- 
+
   const sideW=sidebarOpen?236:0;
- 
+
   return(
     <div style={{fontFamily:"'Inter',sans-serif",background:C.bg,minHeight:"100vh",color:C.text,display:"flex",position:"relative"}}>
       <style>{`
@@ -292,56 +293,62 @@ export default function App(){
         .toggle-btn{position:fixed;top:18px;z-index:200;background:${C.surface};border:1px solid ${C.border};border-radius:8px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:${C.textMuted};transition:all 0.2s;}
         .toggle-btn:hover{background:${C.accentSoft};color:${C.accent};}
       `}</style>
- 
+
       {/* Sidebar toggle */}
       <button className="toggle-btn" onClick={()=>setSidebarOpen(o=>!o)} style={{left:sidebarOpen?244:8}}>
         {sidebarOpen?"◀":"▶"}
       </button>
- 
+
       {/* SIDEBAR */}
       <div className="sidebar-transition" style={{width:sidebarOpen?236:0,overflow:"hidden",flexShrink:0}}>
         <aside style={{width:236,background:C.surface,borderRight:`1px solid ${C.border}`,display:"flex",flexDirection:"column",height:"100vh",position:"sticky",top:0}}>
           {/* Logo */}
           <div style={{padding:"18px 16px 14px",borderBottom:`1px solid ${C.border}`,display:"flex",alignItems:"center",gap:10}}>
             <div style={{width:32,height:32,background:C.accent,borderRadius:8,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:700,fontSize:13,color:C.bg,flexShrink:0}}>UZ</div>
-            <div><div style={{fontSize:16,fontWeight:700,color:C.text}}>UZ Company</div><div style={{fontSize:10,color:C.textMuted}}>Workspace Pro</div></div>
+            <div><div style={{fontSize:16,fontWeight:700,color:C.text}}>UZFLOW</div><div style={{fontSize:10,color:C.textMuted}}>Workspace Pro</div></div>
           </div>
- 
+
           {/* Filter */}
           <div style={{padding:"9px 12px",borderBottom:`1px solid ${C.border}`}}>
             <div style={{fontSize:9,color:C.textDim,fontWeight:600,letterSpacing:1,textTransform:"uppercase",marginBottom:5}}>{t.filterCompany}</div>
             <div style={{display:"flex",flexWrap:"wrap",gap:4}}>
               {["all",...activeCompanies.map(c=>c.id)].map(id=>{const co=id==="all"?null:getCompany(id);const active=filterCompany===id;return(<button key={id} onClick={()=>setFilterCompany(id)} style={{padding:"2px 9px",borderRadius:20,fontSize:11,fontWeight:600,border:`1px solid ${active?(co?.color||C.accent):C.border}`,background:active?(co?`${co.color}18`:C.accentSoft):"transparent",color:active?(co?.color||C.accent):C.textMuted,cursor:"pointer",fontFamily:"inherit",transition:"all 0.15s"}}>{id==="all"?t.allCompanies:(co?.icon+" "+co?.name.split(" ")[0])}</button>);})}</div>
           </div>
- 
+
           {/* Nav */}
           <nav style={{padding:"10px 8px",flex:1,overflowY:"auto"}}>
             {navItems.map(item=>{
               const isActive=view===item.id;
               const badge=item.id==="notif"&&unreadCount>0;
               return(
-                <div key={item.id} style={{position:"relative",marginBottom:2}}>
+                <div key={item.id} style={{position:"relative",marginBottom:2}}
+                  onMouseEnter={e=>{const b=e.currentTarget.querySelector(".nav-edit");if(b)b.style.opacity="1";}}
+                  onMouseLeave={e=>{const b=e.currentTarget.querySelector(".nav-edit");if(b)b.style.opacity="0";}}>
                   <div className={`ni ${isActive?"na":""}`} onClick={()=>setView(item.id)}
                     style={{display:"flex",alignItems:"center",gap:9,padding:"9px 10px",borderRadius:8,color:isActive?item.color:C.textMuted,fontSize:13,fontWeight:500}}>
                     <span style={{fontSize:15,width:20,textAlign:"center",flexShrink:0}}>{item.icon}</span>
                     <span style={{flex:1}}>{navLabel(item.id)}</span>
                     {badge&&<span className="pulse" style={{width:18,height:18,borderRadius:"50%",background:C.red,display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:700,color:"#fff",flexShrink:0}}>{unreadCount}</span>}
-                    <button className="db" onClick={e=>{e.stopPropagation();setEditNavItem({...item});setShowIconPicker(false);setShowColorPickerNav(false);}}
-                      style={{background:"none",border:"none",color:C.textMuted,cursor:"pointer",fontSize:11,padding:"0 2px",lineHeight:1}}>✎</button>
+                    <button className="nav-edit" onClick={e=>{e.stopPropagation();setEditNavItem({...item});setShowIconPicker(false);setShowColorPickerNav(false);}}
+                      style={{background:"none",border:"none",color:C.accent,cursor:"pointer",fontSize:14,padding:"0 3px",lineHeight:1,opacity:0,transition:"opacity 0.15s",flexShrink:0}}>✎</button>
                   </div>
                 </div>
               );
             })}
             <div style={{marginTop:14,marginBottom:5,padding:"0 10px",fontSize:9,color:C.textDim,fontWeight:600,letterSpacing:1,textTransform:"uppercase"}}>{t.companies}</div>
-            {activeCompanies.map(c=>{const p=companyProgress(c.id);return(<div key={c.id} className="ci" style={{display:"flex",alignItems:"center",gap:8,padding:"6px 10px",cursor:"pointer",marginBottom:2,borderRadius:8,transition:"all 0.15s",position:"relative"}} onMouseEnter={e=>e.currentTarget.classList.add("hov")} onMouseLeave={e=>e.currentTarget.classList.remove("hov")}>
-              <span style={{fontSize:14,flexShrink:0}} onClick={()=>{setView("tasks");setFilterCompany(c.id);}}>{c.icon}</span>
-              <span style={{fontSize:12,color:C.textMuted,flex:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}} onClick={()=>{setView("tasks");setFilterCompany(c.id);}}>{c.name}</span>
-              <span style={{fontSize:10,color:C.textDim}} onClick={()=>{setView("tasks");setFilterCompany(c.id);}}>{p.done}/{p.total}</span>
-              <button className="db" onClick={e=>{e.stopPropagation();setEditSidebarCompany({...c});setShowSidebarIconPicker(false);setShowSidebarColorPicker(false);}}
-                style={{background:"none",border:"none",color:C.textMuted,cursor:"pointer",fontSize:11,padding:"0 2px",lineHeight:1,flexShrink:0}}>✎</button>
-            </div>);})}
+            {activeCompanies.map(c=>{const p=companyProgress(c.id);return(
+              <div key={c.id} className="ci" style={{display:"flex",alignItems:"center",gap:8,padding:"6px 10px",marginBottom:2,borderRadius:8,transition:"all 0.15s",position:"relative"}}
+                onMouseEnter={e=>{const btn=e.currentTarget.querySelector('.co-edit');if(btn)btn.style.opacity='1';}}
+                onMouseLeave={e=>{const btn=e.currentTarget.querySelector('.co-edit');if(btn)btn.style.opacity='0';}}>
+                <span style={{fontSize:14,flexShrink:0,cursor:"pointer"}} onClick={()=>{setView("tasks");setFilterCompany(c.id);}}>{c.icon}</span>
+                <span style={{fontSize:12,color:C.textMuted,flex:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",cursor:"pointer"}} onClick={()=>{setView("tasks");setFilterCompany(c.id);}}>{c.name}</span>
+                <span style={{fontSize:10,color:C.textDim,cursor:"pointer"}} onClick={()=>{setView("tasks");setFilterCompany(c.id);}}>{p.done}/{p.total}</span>
+                <button className="co-edit" onClick={e=>{e.stopPropagation();setEditSidebarCompany({...c});setShowSidebarIconPicker(false);setShowSidebarColorPicker(false);}}
+                  style={{background:"none",border:"none",color:C.accent,cursor:"pointer",fontSize:14,padding:"0 3px",lineHeight:1,flexShrink:0,opacity:0,transition:"opacity 0.15s"}}>✎</button>
+              </div>
+            );})}
           </nav>
- 
+
           {/* Profile */}
           <div style={{padding:"11px 13px",borderTop:`1px solid ${C.border}`,position:"relative"}} ref={profileRef}>
             <div className="pb" onClick={()=>setShowProfileMenu(!showProfileMenu)} style={{display:"flex",alignItems:"center",gap:9,cursor:"pointer",padding:"6px 8px",transition:"all 0.18s"}}>
@@ -359,7 +366,7 @@ export default function App(){
           </div>
         </aside>
       </div>
- 
+
       {/* MAIN */}
       <div style={{flex:1,overflow:"auto",transition:"all 0.25s",paddingLeft:sidebarOpen?28:48}}>
         {/* Topbar */}
@@ -378,9 +385,9 @@ export default function App(){
             {(view==="dashboard"||view==="tasks")&&<button onClick={()=>setShowNewTask(true)} style={{padding:"8px 15px",borderRadius:9,fontSize:13,fontWeight:600,background:C.accent,border:"none",color:C.bg,cursor:"pointer",fontFamily:"inherit"}}>+ {t.newTask}</button>}
           </div>
         </div>
- 
+
         <div style={{padding:"20px 26px 20px 0"}}>
- 
+
           {/* DASHBOARD */}
           {view==="dashboard"&&(
             <div className="fi">
@@ -407,7 +414,7 @@ export default function App(){
               </div>
             </div>
           )}
- 
+
           {/* TASKS */}
           {view==="tasks"&&(
             <div className="fi">
@@ -436,7 +443,7 @@ export default function App(){
                   <button key={vt.key} className="vt" onClick={()=>setTaskView(vt.key)} style={{borderColor:taskView===vt.key?C.accent:C.border,background:taskView===vt.key?C.accentSoft:"transparent",color:taskView===vt.key?C.accent:C.textMuted}}>{vt.icon} {vt.label}</button>
                 ))}
               </div>
- 
+
               {/* KANBAN */}
               {taskView==="kanban"&&(
                 <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:12,alignItems:"start"}}>
@@ -466,7 +473,7 @@ export default function App(){
                   ))}
                 </div>
               )}
- 
+
               {/* LIST */}
               {taskView==="list"&&(
                 <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:12,overflow:"hidden"}}>
@@ -502,7 +509,7 @@ export default function App(){
                   })}
                 </div>
               )}
- 
+
               {/* CALENDAR */}
               {taskView==="calendar"&&(
                 <div>
@@ -528,7 +535,7 @@ export default function App(){
                   <div style={{marginTop:8,fontSize:11,color:C.textMuted,textAlign:"center"}}>{t.dragHint}</div>
                 </div>
               )}
- 
+
               {/* GANTT */}
               {taskView==="gantt"&&(
                 <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:12,overflow:"auto"}}>
@@ -549,7 +556,7 @@ export default function App(){
               )}
             </div>
           )}
- 
+
           {/* COMPANIES */}
           {view==="companies"&&(
             <div className="fi">
@@ -570,7 +577,7 @@ export default function App(){
               {completedCompanies.length>0&&<><h3 style={{fontSize:11,fontWeight:600,color:C.textMuted,marginBottom:9,textTransform:"uppercase",letterSpacing:0.5}}>{t.completedCompanies}</h3><div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:9}}>{completedCompanies.map(c=><div key={c.id} style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:11,padding:13,opacity:0.5}}><div style={{display:"flex",alignItems:"center",gap:7,marginBottom:7}}><span>{c.icon}</span><span style={{fontSize:13,fontWeight:600,color:C.textMuted}}>{c.name}</span></div><button onClick={()=>deleteCompany(c.id)} style={{padding:"4px 9px",borderRadius:7,background:`${C.red}15`,border:`1px solid ${C.red}44`,color:C.red,cursor:"pointer",fontSize:11,fontFamily:"inherit"}}>{t.deleteCompany}</button></div>)}</div></>}
             </div>
           )}
- 
+
           {/* CLIENTS */}
           {view==="clients"&&(
             <div className="fi">
@@ -597,7 +604,7 @@ export default function App(){
               </div>
             </div>
           )}
- 
+
           {/* FINANCIAL */}
           {view==="financial"&&(
             <div className="fi">
@@ -619,11 +626,24 @@ export default function App(){
                   </div>
                 )}
               </div>
- 
+
+              {/* Company filter */}
+              <div style={{display:"flex",gap:7,marginBottom:16,alignItems:"center",flexWrap:"wrap"}}>
+                <span style={{fontSize:11,color:C.textMuted,fontWeight:600}}>Empresa:</span>
+                {["all",...activeCompanies.map(cc=>cc.id)].map(id=>{
+                  const co2=id==="all"?null:companies.find(cc=>cc.id===id);
+                  const isAct=finCompanyFilter===id;
+                  return(<button key={id} onClick={()=>setFinCompanyFilter(id)}
+                    style={{padding:"4px 12px",borderRadius:20,fontSize:12,fontWeight:600,border:"1px solid "+(isAct?(co2?.color||C.accent):C.border),background:isAct?(co2?co2.color+"18":C.accentSoft):"transparent",color:isAct?(co2?.color||C.accent):C.textMuted,cursor:"pointer",fontFamily:"inherit",transition:"all 0.15s"}}>
+                    {id==="all"?"Todas":(co2?.icon+" "+co2?.name.split(" ")[0])}
+                  </button>);
+                })}
+              </div>
+
               {/* Per-currency cards — always show all 3 */}
               <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:14,marginBottom:18}}>
                 {Object.entries(CURRENCIES).map(([key,cur])=>{
-                  const filtE=entries.filter(e=>e.currency===key&&(filterCompany==="all"||e.companyId===filterCompany)&&entryMatchesDateFilter(e));
+                  const filtE=entries.filter(e=>e.currency===key&&(finCompanyFilter==="all"||e.companyId===finCompanyFilter)&&entryMatchesDateFilter(e));
                   const inc=filtE.filter(e=>e.type==="income").reduce((s,e)=>s+Number(e.amount),0);
                   const exp=filtE.filter(e=>e.type==="expense").reduce((s,e)=>s+Number(e.amount),0);
                   const bal=inc-exp;
@@ -653,14 +673,14 @@ export default function App(){
                   );
                 })}
               </div>
- 
+
               {/* Entries table */}
               <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:12,overflow:"hidden"}}>
                 <div style={{padding:"11px 15px",borderBottom:`1px solid ${C.border}`,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
                   <span style={{fontSize:11,fontWeight:600,color:C.textMuted,textTransform:"uppercase",letterSpacing:0.5}}>{t.entries}</span>
                   <button onClick={()=>setShowNewEntry(true)} style={{padding:"5px 12px",borderRadius:7,fontSize:12,fontWeight:600,background:C.surface,border:`1px solid ${C.border}`,color:C.textMuted,cursor:"pointer",fontFamily:"inherit"}}>+ {t.newEntry}</button>
                 </div>
-                {visibleEntries.filter(e=>entryMatchesDateFilter(e)).sort((a,b)=>b.date.localeCompare(a.date)).map(e=>{
+                {entries.filter(e=>(finCompanyFilter==="all"||e.companyId===finCompanyFilter)&&entryMatchesDateFilter(e)).sort((a,b)=>b.date.localeCompare(a.date)).map(e=>{
                   const co=getCompany(e.companyId);const cl=getClient(e.clientId);const ec=CURRENCIES[e.currency]||CUR;
                   if(editEntryId===e.id)return(<EditEntryRow key={e.id} entry={e} C={C} inp={inp} activeCompanies={activeCompanies} clients={clients} onSave={saveEntry} onCancel={()=>setEditEntryId(null)} CUR={CUR}/>);
                   return(
@@ -672,11 +692,11 @@ export default function App(){
                     </div>
                   );
                 })}
-                {visibleEntries.filter(e=>entryMatchesDateFilter(e)).length===0&&<div style={{padding:32,textAlign:"center",color:C.textDim,fontSize:13}}>Nenhum lançamento.</div>}
+                {entries.filter(e=>(finCompanyFilter==="all"||e.companyId===finCompanyFilter)&&entryMatchesDateFilter(e)).length===0&&<div style={{padding:32,textAlign:"center",color:C.textDim,fontSize:13}}>Nenhum lançamento.</div>}
               </div>
             </div>
           )}
- 
+
           {/* NOTIFICATIONS */}
           {view==="notif"&&(
             <div className="fi">
@@ -706,18 +726,19 @@ export default function App(){
           )}
         </div>
       </div>
- 
+
       {/* ══ MODALS ══ */}
- 
+
       {/* Edit nav item */}
       {editNavItem&&(
         <Modal onClose={()=>{setEditNavItem(null);setShowIconPicker(false);setShowColorPickerNav(false);}} C={C} title={t.customizeNav}>
+          <Field label="Nome" C={C}><input style={inp(C)} value={editNavItem.label||navLabel(editNavItem.id)} onChange={e=>setEditNavItem({...editNavItem,label:e.target.value})}/></Field>
           <Field label={t.icon} C={C}><div style={{position:"relative",display:"inline-block"}}><button onClick={()=>{setShowIconPicker(!showIconPicker);setShowColorPickerNav(false);}} style={{width:46,height:46,borderRadius:9,background:C.surface,border:`1px solid ${C.border}`,cursor:"pointer",fontSize:22,display:"flex",alignItems:"center",justifyContent:"center"}}>{editNavItem.icon}</button>{showIconPicker&&<IconPicker C={C} onSelect={ic=>setEditNavItem({...editNavItem,icon:ic})} onClose={()=>setShowIconPicker(false)}/>}</div></Field>
           <Field label={t.color} C={C}><div style={{position:"relative",display:"inline-block"}}><button onClick={()=>{setShowColorPickerNav(!showColorPickerNav);setShowIconPicker(false);}} style={{width:46,height:46,borderRadius:9,background:editNavItem.color,border:`2px solid ${C.border}`,cursor:"pointer"}}/>{showColorPickerNav&&<ColorPicker C={C} current={editNavItem.color} onSelect={col=>setEditNavItem({...editNavItem,color:col})} onClose={()=>setShowColorPickerNav(false)}/>}</div></Field>
           <Actions C={C} onCancel={()=>{setEditNavItem(null);setShowIconPicker(false);setShowColorPickerNav(false);}} onConfirm={()=>{setNavItems(items=>items.map(x=>x.id===editNavItem.id?editNavItem:x));setEditNavItem(null);}} lbl={t.saveNav}/>
         </Modal>
       )}
- 
+
       {/* Task detail/edit */}
       {viewTask&&editTask&&(
         <Modal onClose={()=>{setViewTask(null);setEditingTask(false);}} C={C} title={editingTask?t.editTask:t.taskDetail} wide>
@@ -760,7 +781,7 @@ export default function App(){
           )}
         </Modal>
       )}
- 
+
       {/* Nova Tarefa */}
       {showNewTask&&(
         <Modal onClose={()=>setShowNewTask(false)} C={C} title={"+ "+t.newTask}>
@@ -776,7 +797,7 @@ export default function App(){
           <Actions C={C} onCancel={()=>setShowNewTask(false)} onConfirm={addTask} lbl={t.create+" "+t.tasks.toLowerCase()}/>
         </Modal>
       )}
- 
+
       {/* Nova Empresa */}
       {showNewCompany&&(
         <Modal onClose={()=>setShowNewCompany(false)} C={C} title={"+ "+t.newCompany}>
@@ -786,7 +807,7 @@ export default function App(){
           <Actions C={C} onCancel={()=>setShowNewCompany(false)} onConfirm={addCompany} lbl={t.create}/>
         </Modal>
       )}
- 
+
       {/* Novo Tipo Projeto */}
       {showNewProjType&&(
         <Modal onClose={()=>setShowNewProjType(false)} C={C} title="+ Tipo de Projeto">
@@ -795,7 +816,7 @@ export default function App(){
           <Actions C={C} onCancel={()=>setShowNewProjType(false)} onConfirm={addProjectType} lbl={t.create}/>
         </Modal>
       )}
- 
+
       {/* Novo Cliente */}
       {showNewClient&&(
         <Modal onClose={()=>setShowNewClient(false)} C={C} title={"+ "+t.newClient} wide>
@@ -815,7 +836,7 @@ export default function App(){
           <Actions C={C} onCancel={()=>setShowNewClient(false)} onConfirm={addClient} lbl={t.create}/>
         </Modal>
       )}
- 
+
       {/* View/Edit Client */}
       {viewClient&&(
         <Modal onClose={()=>{setViewClient(null);setEditClientId(null);}} C={C} title={editClientId?"✎ "+viewClient.name:viewClient.name} wide>
@@ -834,7 +855,7 @@ export default function App(){
           )}
         </Modal>
       )}
- 
+
       {/* Novo Lançamento */}
       {showNewEntry&&(
         <Modal onClose={()=>setShowNewEntry(false)} C={C} title={"+ "+t.newEntry}>
@@ -850,7 +871,7 @@ export default function App(){
           <Actions C={C} onCancel={()=>setShowNewEntry(false)} onConfirm={addEntry} lbl={t.post}/>
         </Modal>
       )}
- 
+
       {/* Edit Profile */}
       {showProfileEdit&&(
         <Modal onClose={()=>setShowProfileEdit(false)} C={C} title={t.editProfile}>
@@ -872,7 +893,7 @@ export default function App(){
           <Actions C={C} onCancel={()=>setShowProfileEdit(false)} onConfirm={()=>{setProfile({...editProfile});setShowProfileEdit(false);}} lbl={t.save}/>
         </Modal>
       )}
- 
+
       {/* Edit Company (sidebar) */}
       {editSidebarCompany&&(
         <Modal onClose={()=>{setEditSidebarCompany(null);setShowSidebarIconPicker(false);setShowSidebarColorPicker(false);}} C={C} title="✎ Editar Empresa">
@@ -898,7 +919,7 @@ export default function App(){
           <Actions C={C} onCancel={()=>{setEditSidebarCompany(null);setShowSidebarIconPicker(false);setShowSidebarColorPicker(false);}} onConfirm={saveSidebarCompany} lbl="Salvar"/>
         </Modal>
       )}
- 
+
       {/* Settings */}
       {showSettings&&(
         <Modal onClose={()=>setShowSettings(false)} C={C} title={t.settings}>
@@ -910,7 +931,7 @@ export default function App(){
     </div>
   );
 }
- 
+
 function EditEntryRow({entry,C,inp,activeCompanies,clients,onSave,onCancel}){
   const [e,setE]=useState({...entry});
   const cls=clients.filter(cl=>cl.companies.includes(e.companyId));
@@ -928,7 +949,7 @@ function EditEntryRow({entry,C,inp,activeCompanies,clients,onSave,onCancel}){
     </div>
   );
 }
- 
+
 function EditClientForm({client,C,inp,activeCompanies,onSave,onCancel,t}){
   const [cl,setCl]=useState({...client});
   return(
